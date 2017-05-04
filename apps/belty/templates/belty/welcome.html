@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Welcome</title>
+	</head>
+	<body>
+		<style>
+			label{
+				display: block;
+				margin-bottom: 5px;
+			}
+			form{
+				display: inline-block;
+				vertical-align: top;
+				padding: 10px;
+			}
+			a{
+				margin: 5px;
+			}
+		</style>
+
+
+
+		<a href="/logout">Logout</a>
+		<h1>Welcome, {{request.session.user_fname}}!</h1>
+		<h3>Your Favorites</h3>
+		<table>
+			<style>
+				table, th, td {
+		    	border: 1px solid black;
+				}
+			</style>
+			<tr>
+				<th>Posted By</th>
+				<th>Quote</th>
+				<th>Remove Quote</th>
+			</tr>
+		{% for quote in quote_list %}
+			<form action="/welcome/{{quote.id}}/remove">
+				{% csrf_token %}
+				<tr>
+					<td><a href="/users/{{quote.id}}">{{quote.user.f_name}}</a></td> 
+					<td>{{quote.message}}</td>
+					<td><button>Remove</button></td>
+				</tr>
+			</form>	
+		{% endfor %}
+		</table>
+ 		
+		<h3>Quotable Quotes</h3>
+		<table>
+			<style>
+				table, th, td {
+		    	border: 1px solid black;
+				}
+			</style>
+			<tr>
+				<th>Posted By</th>
+				<th>Quote</th>
+				<th>Add a Quote</th>
+			</tr>
+		{% for quote in others_list %}
+			<tr>
+				<td><a href="/users/{{quote.id}}">{{quote.user.f_name}}</a></td> 
+				<td>{{quote.message}}</td>
+				<td><a href="">Add to My List</a></td>
+			</tr>
+		{% endfor %}
+		</table>
+		{% if messages %}
+			<ul class="messages">
+				{% for message in messages %}
+					<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+
+		<h3>Contribute a Quote:</h3>
+		<form action="/add" method="POST">
+			{% csrf_token %}
+			<label for="quote">
+				Quoted By:
+				<input type="text" name="quote">
+			</label>
+			<label for="message">
+				Message:
+				<input type="text" name="message">	
+			</label>
+			<input type="submit" value="Add">
+		</form>
+
+	</body>
+</html>

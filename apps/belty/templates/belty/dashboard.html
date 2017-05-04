@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dashboard</title>
+	</head>
+	<body>
+		<style>
+			label{
+				/*display: block;*/
+				margin-bottom: : 10px;
+			}
+			a{
+				margin: 5px;
+			}
+		</style>
+		<a href="/logout">Logout</a>
+		<a href="/home">Home</a>
+
+		{% for quote in quote_list %}
+		<h2>Posted By: {{quote.user.f_name}}</h2>
+		<h2>Count: {{count}}</h2>
+			<h3>{{quote.quote}}: {{quote.message}}</h3>
+		{% endfor %}
+
+		{% for quote in others_list %}
+		<h2>Posted By: {{quote.user.f_name}}</h2>
+		<h2>Count: {{count}}</h2>
+			<h3>{{quote.quote}}: {{quote.message}}</h3>
+		{% endfor %}
+
+	</body>
+</html>
