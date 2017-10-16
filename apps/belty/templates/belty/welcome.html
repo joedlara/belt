@@ -18,12 +18,9 @@
 				margin: 5px;
 			}
 		</style>
-
-
-
 		<a href="/logout">Logout</a>
 		<h1>Welcome, {{request.session.user_fname}}!</h1>
-		<h3>Your Favorites</h3>
+		<h3>Your Posts / Favorites</h3>
 		<table>
 			<style>
 				table, th, td {
@@ -35,19 +32,38 @@
 				<th>Quote</th>
 				<th>Remove Quote</th>
 			</tr>
-		{% for quote in quote_list %}
-			<form action="/welcome/{{quote.id}}/remove">
+
+
+
+			{% for quote in quote_list %}
 				{% csrf_token %}
 				<tr>
 					<td><a href="/users/{{quote.id}}">{{quote.user.f_name}}</a></td> 
 					<td>{{quote.message}}</td>
-					<td><button>Remove</button></td>
+					<form method="POST" action="/welcome/{{quote.id}}/remove">
+						{% csrf_token %}
+						<td><button>Remove</button></td>
+					</form>	
 				</tr>
-			</form>	
-		{% endfor %}
+			{% endfor %}
+
+			{% for fav in fav_list %}
+
+			<tr>
+				<td><a href="/users/{{fav.quote.id}}">{{fav.quote.user.f_name}}</a></td> 
+				<td>{{fav.quote.message}}</td>
+				<form method="POST" action="/welcome/{{fav.id}}/remove_fav">
+					{% csrf_token %}
+					<td><button>Remove</button></td>
+				</form>	
+			</tr>
+
+			{% endfor %}
+
 		</table>
- 		
-		<h3>Quotable Quotes</h3>
+
+
+		<h3>Quotable Passages</h3>
 		<table>
 			<style>
 				table, th, td {
@@ -63,7 +79,7 @@
 			<tr>
 				<td><a href="/users/{{quote.id}}">{{quote.user.f_name}}</a></td> 
 				<td>{{quote.message}}</td>
-				<td><a href="">Add to My List</a></td>
+				<td><a href="/welcome/{{quote.id}}/favorite">Add to Favorites</a></td>
 			</tr>
 		{% endfor %}
 		</table>

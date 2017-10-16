@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import User, Quote, Other
+from .models import User, Quote, Favorite
 from django.contrib import messages
+import logging
+
 
 def index(request):
 	return render(request, 'belty/index.html')
@@ -37,6 +39,7 @@ def success(request):
 
 	quote_list = []
 	others_list = []
+	fav_list = Favorite.objects.filter(user=request.session['user_id'])
 	for quote in Quote.objects.all():
 		if quote.user.id == request.session['user_id']:
 			quote_list.append(quote)
@@ -45,7 +48,8 @@ def success(request):
 
 	context_2 = {
 	'quote_list': quote_list,
-	'others_list': others_list,  
+	'others_list': others_list, 
+	'fav_list': fav_list, 
 	}
 	return render(request, 'belty/welcome.html', context_2)
 
@@ -93,18 +97,27 @@ def add(request):
 
 def dashboard(request, quote_id):
 	quote_list = []
-	others_list = []
+	others_list = [] 
 	for quote in Quote.objects.filter(id = quote_id):
 		if quote.user.id == request.session['user_id']:
 			quote_list.append(quote)
 		else: 
 			others_list.append(quote)
-
 	context_3 = {
 	'quote_list': quote_list,
-	'others_list': others_list,  
+	'others_list': others_list, 
+
 	}
 	return render(request, 'belty/dashboard.html', context_3)
+	
+def fav_quote(request, quote_id):
+
+	person = User.objects.get(id = request.session['user_id'])
+	quotesss = Quote.objects.get(id = quote_id)
+	fav_quote = Favorite.objects.create(user=person, quote=quotesss)
+
+	return redirect('/welcome')
+
 	
 def home(request):
 	return redirect('/welcome')
@@ -112,18 +125,20 @@ def home(request):
 def remove_quote(request, quote_id):
 	if request.method == "POST":
 		a_quote = Quote.objects.get(id = quote_id)
+		
 		if a_quote.user.id == request.session['user_id']:
-			a_quote.delete()
+			
+			a_quote.delete();
 		else:
 			messages.add_message(request, messages.ERROR, "You're not allowed to do that")
 	return redirect('/welcome')
 
 
-
-
-
-
-
+def remove_fav(request, fav_id):
+	fav_del = Favorite.objects.get(id=fav_id)
+	fav_del.delete()
+	
+	return redirect('/welcome')
 
 
 

@@ -18,15 +18,16 @@
 
 		{% for quote in quote_list %}
 		<h2>Posted By: {{quote.user.f_name}}</h2>
-		<h2>Count: {{count}}</h2>
-			<h3>{{quote.quote}}: {{quote.message}}</h3>
+			<h2>By: {{quote.quote}} </h2>
+			<h3>Quote: {{quote.message}}</h3>
 		{% endfor %}
 
 		{% for quote in others_list %}
 		<h2>Posted By: {{quote.user.f_name}}</h2>
-		<h2>Count: {{count}}</h2>
-			<h3>{{quote.quote}}: {{quote.message}}</h3>
+			<h2>By: {{quote.quote}} </h2>
+			<h3>Quote: {{quote.message}}</h3>
 		{% endfor %}
+
 
 	</body>
 </html>

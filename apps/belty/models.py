@@ -127,9 +127,10 @@ class Quote(models.Model):
 	user = models.ForeignKey(User)
 	objects = QuoteManager()
 
-class Other(models.Model):
-	user = models.ForeignKey(User)
-	quote = models.ForeignKey(Quote) 
+class Favorite(models.Model):
+	user = models.ForeignKey(User, related_name = 'user_likes')
+	quote = models.ForeignKey(Quote, related_name = 'quote_likes') 
+
 
 
 
